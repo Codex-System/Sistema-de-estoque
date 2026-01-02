@@ -20,7 +20,11 @@ public class UsuarioService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public Usuario registrarUsuario(String username, String password){
+    public Usuario registrarUsuario(String username, String password) {
+        if (user.findByUsername(username).isPresent()) {
+           throw  new RuntimeException("username já existe!");
+        }
+
         String senhaCriptografada = passwordEncoder.encode(password);
         Usuario usuario = new Usuario(username, senhaCriptografada);
         return user.save(usuario);
