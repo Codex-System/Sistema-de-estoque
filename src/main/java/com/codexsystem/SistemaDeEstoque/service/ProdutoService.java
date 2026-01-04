@@ -7,6 +7,7 @@ import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProdutoService {
@@ -21,7 +22,7 @@ public class ProdutoService {
         return repo.findAll();
     }
 
-    public Produto searchById(Long id) {
+    public Produto searchById(UUID id) {
         return repo.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontrado("Produto não encontrado"));
     }
@@ -34,7 +35,7 @@ public class ProdutoService {
         return repo.save(produto);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!repo.existsById(id)) {
             throw new RecursoNaoEncontrado("Produto com id " + id + " não encontrado");
         }

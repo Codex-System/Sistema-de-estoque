@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Produto, Long> {
+public interface ProdutoRepository extends JpaRepository<Produto, UUID> {
     List<Produto> findByNomeContainingIgnoreCase(String nome);
 
     Produto deleteByNomeContainingIgnoreCase(String nome);
