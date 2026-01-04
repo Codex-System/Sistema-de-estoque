@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/produtos")
@@ -26,7 +27,7 @@ public class ProdutoController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> getById(@PathVariable Long id) {
+    public ResponseEntity<Produto> getById(@PathVariable UUID id) {
         Produto produto = produtoService.searchById(id);
         return ResponseEntity.ok(produto);
     }
@@ -46,7 +47,7 @@ public class ProdutoController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable UUID id) {
         produtoService.delete(id);
         return ResponseEntity.ok("Produto deletado com sucesso");
     }
