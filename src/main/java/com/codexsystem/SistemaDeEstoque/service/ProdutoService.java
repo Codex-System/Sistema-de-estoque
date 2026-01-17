@@ -1,12 +1,12 @@
 package com.codexsystem.SistemaDeEstoque.service;
 
 import com.codexsystem.SistemaDeEstoque.exceptions.RecursoNaoEncontrado;
+import com.codexsystem.SistemaDeEstoque.model.Loja;
 import com.codexsystem.SistemaDeEstoque.model.Produto;
 import com.codexsystem.SistemaDeEstoque.repository.ProdutoRepository;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,32 +18,47 @@ public class ProdutoService {
         this.repo = repo;
     }
 
-    public List<Produto> getAll() {
-        return repo.findAll();
+    public List<Produto> getAllByLoja(Loja loja) {
+        return repo.findAllByLoja(loja);
     }
 
-    public Produto searchById(UUID id) {
-        return repo.findById(id)
+    public Produto searchById(UUID id, Loja loja) {
+        return repo.findByIdAndLoja(id, loja)
                 .orElseThrow(() -> new RecursoNaoEncontrado("Produto não encontrado"));
     }
 
-    public List<Produto> searchByName(String nome) {
-        return repo.findByNomeContainingIgnoreCase(nome);
+    public List<Produto> searchByName(String nome, Loja loja) {
+        return repo.findByNomeContainingIgnoreCaseAndLoja(nome, loja);
     }
 
-    public Produto save(Produto produto) {
+    public Produto save(Produto produto, Loja loja) {
+        produto.setLoja(loja);
         return repo.save(produto);
     }
 
-    public void delete(UUID id) {
-        if (!repo.existsById(id)) {
-            throw new RecursoNaoEncontrado("Produto com id " + id + " não encontrado");
+    public void delete(UUID id, Loja loja) {
+        Produto produto = repo.findByIdAndLoja(id, loja)
+                .orElseThrow(() -> new RecursoNaoEncontrado("Produto não encontrado"));
+
+        repo.delete(produto);
+    }
+
+    public Produto baixarEstoque(UUID id, Integer quantidade, Loja loja) {
+        Produto produto = searchById(id, loja);
+
+        if (produto.getQuantidade() < quantidade) {
+            throw new RuntimeException("Estoque insuficiente");
         }
-        repo.deleteById(id);
+
+        produto.setQuantidade(produto.getQuantidade() - quantidade);
+        return repo.save(produto);
     }
 
-    public void deleteBynome(String nome){
-        repo.deleteByNomeContainingIgnoreCase(nome);
+    public Produto buscarPorCodigoBarras(String codigoBarras, Loja loja) {
+        return repo.findByCodigoBarrasAndLoja(codigoBarras, loja)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontrado("Produto não encontrado")
+                );
     }
+
 }
-

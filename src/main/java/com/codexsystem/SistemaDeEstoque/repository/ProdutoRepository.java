@@ -1,5 +1,6 @@
 package com.codexsystem.SistemaDeEstoque.repository;
 
+import com.codexsystem.SistemaDeEstoque.model.Loja;
 import com.codexsystem.SistemaDeEstoque.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,9 +11,13 @@ import java.util.UUID;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, UUID> {
-    List<Produto> findByNomeContainingIgnoreCase(String nome);
 
-    Produto deleteByNomeContainingIgnoreCase(String nome);
+    List<Produto> findAllByLoja(Loja loja);
+
+    Optional<Produto> findByIdAndLoja(UUID id, Loja loja);
+
+    List<Produto> findByNomeContainingIgnoreCaseAndLoja(String nome, Loja loja);
+
+    Optional<Produto> findByCodigoBarrasAndLoja(String codigoBarras, Loja loja);
 
 }
-

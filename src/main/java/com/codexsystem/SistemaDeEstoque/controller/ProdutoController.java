@@ -1,11 +1,12 @@
 package com.codexsystem.SistemaDeEstoque.controller;
 
+import com.codexsystem.SistemaDeEstoque.model.Loja;
 import com.codexsystem.SistemaDeEstoque.model.Produto;
 import com.codexsystem.SistemaDeEstoque.service.ProdutoService;
+import com.codexsystem.SistemaDeEstoque.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,47 +15,46 @@ import java.util.UUID;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
+    private final UsuarioService usuarioService;
 
-    public ProdutoController(ProdutoService produtoService) {
+    public ProdutoController(
+            ProdutoService produtoService,
+            UsuarioService usuarioService
+    ) {
         this.produtoService = produtoService;
+        this.usuarioService = usuarioService;
     }
-
 
     @GetMapping
     public ResponseEntity<List<Produto>> getAll() {
-        return ResponseEntity.ok(produtoService.getAll());
+        Loja loja = usuarioService.getLojaDoUsuarioLogado();
+        return ResponseEntity.ok(produtoService.getAllByLoja(loja));
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getById(@PathVariable UUID id) {
-        Produto produto = produtoService.searchById(id);
+        Loja loja = usuarioService.getLojaDoUsuarioLogado();
+        Produto produto = produtoService.searchById(id, loja);
         return ResponseEntity.ok(produto);
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
-        List<Produto> produtos = produtoService.searchByName(nome);
-        return ResponseEntity.ok(produtos);
+        Loja loja = usuarioService.getLojaDoUsuarioLogado();
+        return ResponseEntity.ok(produtoService.searchByName(nome, loja));
     }
 
-
-    @PostMapping("adiciona")
+    @PostMapping
     public ResponseEntity<Produto> create(@RequestBody Produto produto) {
-        Produto novoProduto = produtoService.save(produto);
+        Loja loja = usuarioService.getLojaDoUsuarioLogado();
+        Produto novoProduto = produtoService.save(produto, loja);
         return ResponseEntity.ok(novoProduto);
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable UUID id) {
-        produtoService.delete(id);
-        return ResponseEntity.ok("Produto deletado com sucesso");
-    }
-
-    @DeleteMapping("/delete/{nome}")
-    public ResponseEntity<String> deleteByname(@PathVariable String nome){
-        produtoService.deleteBynome(nome);
-        return ResponseEntity.ok("Produto deleta com sucesso");
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        Loja loja = usuarioService.getLojaDoUsuarioLogado();
+        produtoService.delete(id, loja);
+        return ResponseEntity.noContent().build();
     }
 }

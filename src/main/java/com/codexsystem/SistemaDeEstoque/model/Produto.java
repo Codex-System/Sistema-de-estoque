@@ -32,4 +32,12 @@ public class Produto {
     private BigDecimal valorVenda;
 
     private LocalDate data = LocalDate.now();
+
+    @Column(nullable = false)
+    private String codigoBarras;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loja_id", nullable = false)
+    private Loja loja;
+
 }
