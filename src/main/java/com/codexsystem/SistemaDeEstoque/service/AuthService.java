@@ -1,14 +1,8 @@
 package com.codexsystem.SistemaDeEstoque.service;
 
-import com.codexsystem.SistemaDeEstoque.dto.LoginRequestDTO;
-import com.codexsystem.SistemaDeEstoque.model.Usuario;
-import com.codexsystem.SistemaDeEstoque.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codexsystem.SistemaDeEstoque.dto.requests.LoginRequestDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service

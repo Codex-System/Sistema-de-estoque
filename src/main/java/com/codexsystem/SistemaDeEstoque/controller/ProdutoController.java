@@ -1,7 +1,7 @@
 package com.codexsystem.SistemaDeEstoque.controller;
 
-import com.codexsystem.SistemaDeEstoque.model.Loja;
-import com.codexsystem.SistemaDeEstoque.model.Produto;
+import com.codexsystem.SistemaDeEstoque.domain.Loja;
+import com.codexsystem.SistemaDeEstoque.domain.Produto;
 import com.codexsystem.SistemaDeEstoque.service.ProdutoService;
 import com.codexsystem.SistemaDeEstoque.service.UsuarioService;
 import org.springframework.http.ResponseEntity;

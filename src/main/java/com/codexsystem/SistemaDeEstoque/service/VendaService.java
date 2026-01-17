@@ -1,10 +1,10 @@
 package com.codexsystem.SistemaDeEstoque.service;
 
-import com.codexsystem.SistemaDeEstoque.dto.VendaRequestDTO;
-import com.codexsystem.SistemaDeEstoque.dto.VendaResponseDTO;
+import com.codexsystem.SistemaDeEstoque.dto.requests.VendaRequestDTO;
+import com.codexsystem.SistemaDeEstoque.dto.responses.VendaResponseDTO;
 import com.codexsystem.SistemaDeEstoque.exceptions.RecursoNaoEncontrado;
-import com.codexsystem.SistemaDeEstoque.model.Loja;
-import com.codexsystem.SistemaDeEstoque.model.Produto;
+import com.codexsystem.SistemaDeEstoque.domain.Loja;
+import com.codexsystem.SistemaDeEstoque.domain.Produto;
 import com.codexsystem.SistemaDeEstoque.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

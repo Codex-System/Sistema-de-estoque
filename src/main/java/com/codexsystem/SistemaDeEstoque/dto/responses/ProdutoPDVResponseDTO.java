@@ -1,4 +1,4 @@
-package com.codexsystem.SistemaDeEstoque.dto;
+package com.codexsystem.SistemaDeEstoque.dto.responses;
 
 import java.math.BigDecimal;
 import java.util.UUID;

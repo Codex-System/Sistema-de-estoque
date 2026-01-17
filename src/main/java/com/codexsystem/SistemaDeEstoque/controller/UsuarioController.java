@@ -1,10 +1,9 @@
 package com.codexsystem.SistemaDeEstoque.controller;
 
-import com.codexsystem.SistemaDeEstoque.dto.CriarUsuarioDTO;
-import com.codexsystem.SistemaDeEstoque.dto.UsuarioResponseDTO;
-import com.codexsystem.SistemaDeEstoque.model.Loja;
-import com.codexsystem.SistemaDeEstoque.model.Usuario;
-import com.codexsystem.SistemaDeEstoque.model.UsuarioEnum;
+import com.codexsystem.SistemaDeEstoque.dto.requests.CriarUsuarioDTO;
+import com.codexsystem.SistemaDeEstoque.dto.responses.UsuarioResponseDTO;
+import com.codexsystem.SistemaDeEstoque.domain.Loja;
+import com.codexsystem.SistemaDeEstoque.domain.Usuario;
 import com.codexsystem.SistemaDeEstoque.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

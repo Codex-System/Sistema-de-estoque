@@ -1,4 +1,4 @@
-package com.codexsystem.SistemaDeEstoque.model;
+package com.codexsystem.SistemaDeEstoque.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

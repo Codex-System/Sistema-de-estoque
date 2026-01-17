@@ -1,9 +1,9 @@
 package com.codexsystem.SistemaDeEstoque.service;
 
-import com.codexsystem.SistemaDeEstoque.dto.UsuarioResponseDTO;
-import com.codexsystem.SistemaDeEstoque.model.Loja;
-import com.codexsystem.SistemaDeEstoque.model.Usuario;
-import com.codexsystem.SistemaDeEstoque.model.UsuarioEnum;
+import com.codexsystem.SistemaDeEstoque.dto.responses.UsuarioResponseDTO;
+import com.codexsystem.SistemaDeEstoque.domain.Loja;
+import com.codexsystem.SistemaDeEstoque.domain.Usuario;
+import com.codexsystem.SistemaDeEstoque.domain.UsuarioEnum;
 import com.codexsystem.SistemaDeEstoque.repository.LojaRepository;
 import com.codexsystem.SistemaDeEstoque.repository.UserRepository;
 import org.springframework.security.core.Authentication;

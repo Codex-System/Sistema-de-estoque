@@ -1,4 +1,4 @@
-package com.codexsystem.SistemaDeEstoque.dto;
+package com.codexsystem.SistemaDeEstoque.dto.requests;
 
 import java.util.UUID;
 

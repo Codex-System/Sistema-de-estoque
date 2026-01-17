@@ -1,14 +1,9 @@
 package com.codexsystem.SistemaDeEstoque.service;
 
-import com.codexsystem.SistemaDeEstoque.model.Loja;
-import com.codexsystem.SistemaDeEstoque.model.Usuario;
+import com.codexsystem.SistemaDeEstoque.domain.Loja;
+import com.codexsystem.SistemaDeEstoque.domain.Usuario;
 import com.codexsystem.SistemaDeEstoque.repository.LojaRepository;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class LojaService {

@@ -1,8 +1,7 @@
-package com.codexsystem.SistemaDeEstoque.model;
+package com.codexsystem.SistemaDeEstoque.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
