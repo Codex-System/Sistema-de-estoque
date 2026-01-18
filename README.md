@@ -1,67 +1,79 @@
-📦 Sistema de Gestão de Estoque Multi-Tenant
-Este é um sistema de back-end robusto para gestão de estoques e PDV (Ponto de Venda), desenvolvido com Spring Boot 3. A arquitetura é Multi-Tenant, o que significa que múltiplas lojas podem utilizar o sistema simultaneamente com isolamento total de dados.
+# 📦 Sistema de Gestão de Estoque Multi-Tenant (Codex System)
 
-🚀 Principais Funcionalidades
-Multi-Tenancy: Cada loja possui seus próprios produtos e usuários. Um usuário de uma loja nunca acessa os dados de outra.
+Sistema de back-end robusto para gestão de estoques e PDV (Ponto de Venda), desenvolvido com **Spring Boot 3**. O projeto utiliza uma arquitetura **Multi-Tenant**, garantindo isolamento total de dados entre diferentes lojas cadastradas.
 
-Autenticação JWT: Segurança baseada em tokens com suporte a Access Token e Refresh Token.
+## 🚀 Principais Funcionalidades
 
-Gestão de Perfis (Roles): Diferenciação entre ADMIN (dono da loja) e USER (vendedores).
+* **Multi-Tenancy:** Separação lógica de dados. Usuários da Loja A nunca acessam dados da Loja B.
+* **Autenticação JWT:** Sistema de segurança com Access Token (15 min) e Refresh Token (24h).
+* **Gestão de Perfis (RBAC):** * `ADMIN`: Pode cadastrar produtos e criar novos usuários vendedores.
+   * `USER`: Pode consultar estoque e realizar vendas.
+* **PDV Simplificado:** Vendas baseadas em código de barras, facilitando o uso com leitores físicos.
+* **Baixa de Estoque Automática:** Validação de saldo e atualização em tempo real no ato da venda.
 
-PDV Integrado: Venda simplificada através de leitura de código de barras.
+## 🛠️ Tecnologias Utilizadas
 
-Baixa Automática: Controle de estoque em tempo real a cada venda realizada.
+* **Java 17**
+* **Spring Boot 3**
+* **Spring Security** (Proteção de rotas e filtros)
+* **JWT (auth0)** (Geração e validação de tokens)
+* **Spring Data JPA** (Persistência de dados)
+* **Lombok** (Produtividade no código)
+* **Bean Validation** (Validação de entradas)
 
-🛠️ Tecnologias Utilizadas
-Java 17
+---
 
-Spring Boot 3
+## 🏗️ Como Rodar o Projeto
 
-Spring Security (Autenticação e Autorização)
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/Codex-System/Sistema-de-estoque.git
+    ```
+2.  **Configuração de Banco:** No arquivo `src/main/resources/application.properties`, configure as credenciais do seu banco de dados (MySQL/PostgreSQL/H2).
+3.  **Execute a aplicação:**
+    ```bash
+    mvn spring-boot:run
+    ```
 
-JWT (Auth0)
+---
 
-Spring Data JPA
+## 📖 Guia de API (Endpoints)
 
-PostgreSQL / MySQL (ou H2 para testes)
+### 1. Cadastro e Login
+| Método | Rota | Descrição | Acesso |
+| :--- | :--- | :--- | :--- |
+| POST | `/cadastro/loja` | Cria uma nova loja e um Admin | Público |
+| POST | `/auth/login` | Autentica e gera os tokens | Público |
+| POST | `/auth/refresh` | Gera novo Access Token via Refresh | Público |
 
-Lombok
+### 2. Gestão de Produtos
+| Método | Rota | Descrição | Acesso |
+| :--- | :--- | :--- | :--- |
+| POST | `/produtos` | Cadastra um produto na sua loja | Admin |
+| GET | `/produtos` | Lista todos os produtos da loja | Admin/User |
+| DELETE | `/produtos/{id}`| Remove um produto específico | Admin |
 
-🏗️ Como Rodar o Projeto
-Clone o repositório:
+### 3. Operação de Venda (PDV)
+| Método | Rota | Descrição | Acesso |
+| :--- | :--- | :--- | :--- |
+| GET | `/pdv/produto/{code}`| Consulta produto por código de barras | Admin/User |
+| POST | `/pdv/venda` | Realiza venda por código de barras | Admin/User |
 
-Bash
+### 4. Gestão de Usuários
+| Método | Rota | Descrição | Acesso |
+| :--- | :--- | :--- | :--- |
+| POST | `/usuarios` | Cria um vendedor vinculado à sua loja | Admin |
 
-git clone https://github.com/Codex-System/Sistema-de-estoque.git
-Configure o banco de dados: No arquivo src/main/resources/application.properties, ajuste as credenciais do seu banco de dados.
+---
 
-Compile e rode:
+## 🔒 Segurança
 
-Bash
+O sistema utiliza um `SecurityFilter` que intercepta cada requisição, extrai o token JWT e identifica o usuário e a loja a qual ele pertence.
 
-mvn spring-boot:run
-📖 Guia de API (Principais Rotas)
-1. Cadastro e Autenticação
-   POST /cadastro/loja: Cria uma nova loja e o usuário administrador.
 
-POST /auth/login: Autentica e retorna os tokens JWT.
 
-POST /auth/refresh: Renova o Access Token expirado.
+> **Nota:** Nas rotas protegidas, o `loja_id` é injetado automaticamente pelo `UsuarioService` a partir do contexto de autenticação, impedindo que um usuário tente forjar o ID de outra loja no corpo do JSON.
 
-2. Gestão de Estoque (Requer Login)
-   GET /produtos: Lista todos os produtos da sua loja.
+## 📄 Licença
 
-POST /produtos: Cadastra um novo produto (Vínculo automático com sua loja).
-
-GET /produtos/{id}: Busca um produto pelo UUID.
-
-3. Operação de PDV
-   GET /pdv/produto/{codigoBarras}: Consulta informações do produto pelo código de barras.
-
-POST /pdv/venda: Realiza a baixa no estoque enviando o codigoBarras e a quantidade.
-
-4. Gestão de Usuários (Apenas ADMIN)
-   POST /usuarios: O administrador da loja cria novos usuários (vendedores) para sua unidade.
-
-🔒 Segurança e Fluxo de Dados
-O sistema utiliza o contexto de segurança do Spring para injetar a loja do usuário em cada operação. Nunca é necessário passar o ID da Loja manualmente nas requisições de produto ou venda, pois o UsuarioService extrai essa informação diretamente do Token JWT validado.
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
