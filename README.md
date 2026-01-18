@@ -1,57 +1,67 @@
-# 📦 Sistema de Estoque - CodexSystem
+📦 Sistema de Gestão de Estoque Multi-Tenant
+Este é um sistema de back-end robusto para gestão de estoques e PDV (Ponto de Venda), desenvolvido com Spring Boot 3. A arquitetura é Multi-Tenant, o que significa que múltiplas lojas podem utilizar o sistema simultaneamente com isolamento total de dados.
 
-Este projeto é uma API REST robusta para gerenciamento de estoque, focada em práticas modernas de desenvolvimento Java. O sistema permite o controle de produtos e a gestão de usuários com autenticação segura.
+🚀 Principais Funcionalidades
+Multi-Tenancy: Cada loja possui seus próprios produtos e usuários. Um usuário de uma loja nunca acessa os dados de outra.
 
-## 🛠️ Tecnologias e Conceitos Aplicados
+Autenticação JWT: Segurança baseada em tokens com suporte a Access Token e Refresh Token.
 
-* **Java 17 & Spring Boot 3**: Núcleo do projeto.
-* **Spring Security & JWT**: Autenticação stateless com tokens para proteção de rotas.
-* **Padrão DTO (Data Transfer Object)**: Utilizado para desacoplar a camada de persistência da camada de apresentação e proteger dados sensíveis.
-* **Spring Data JPA**: Abstração de banco de dados e persistência.
-* **Lombok**: Redução de código boilerplate.
+Gestão de Perfis (Roles): Diferenciação entre ADMIN (dono da loja) e USER (vendedores).
 
-## 🏗️ Arquitetura do Projeto
+PDV Integrado: Venda simplificada através de leitura de código de barras.
 
-O projeto segue uma estrutura de camadas bem definida:
-1.  **Model**: Entidades que representam as tabelas do banco de dados (Ex: `Usuario`, `Produto`).
-2.  **DTO**: Objetos de transferência para entrada de dados (`LoginRequestDTO`) e saída (`UsuarioResponseDTO`).
-3.  **Repository**: Interfaces para comunicação com o banco de dados.
-4.  **Service**: Camada de lógica de negócio e conversão Entidade ↔ DTO.
-5.  **Controller**: Endpoints da API que gerenciam as requisições HTTP.
+Baixa Automática: Controle de estoque em tempo real a cada venda realizada.
 
+🛠️ Tecnologias Utilizadas
+Java 17
 
+Spring Boot 3
 
-## 🔐 Segurança
+Spring Security (Autenticação e Autorização)
 
-A segurança foi implementada utilizando:
-* **BCrypt**: Para criptografia de senhas antes de salvar no banco.
-* **JWT Auth Filter**: Um filtro personalizado (`OncePerRequestFilter`) que valida o token em cada requisição.
-* **Proteção de Endpoints**: Apenas a rota `/auth/**` é pública; todas as outras exigem um token válido.
+JWT (Auth0)
 
-## 🚀 Como testar a API
+Spring Data JPA
 
-### 1. Registro de Usuário
-Envie um `POST` para `/auth/register` com o corpo:
-```json
-{
-  "username": "admin",
-  "password": "123"
-}
-```
+PostgreSQL / MySQL (ou H2 para testes)
 
+Lombok
 
-A resposta não incluirá a senha, graças ao uso do UsuarioResponseDTO.
+🏗️ Como Rodar o Projeto
+Clone o repositório:
 
+Bash
 
-2. Login
-   Envie um POST para /auth/login. O sistema retornará um token.
+git clone https://github.com/Codex-System/Sistema-de-estoque.git
+Configure o banco de dados: No arquivo src/main/resources/application.properties, ajuste as credenciais do seu banco de dados.
 
-3. Gestão de Produtos
-   Utilize o token no Header Authorization como Bearer <seu_token> para acessar:
+Compile e rode:
 
-GET /produtos: Lista todos os itens.
+Bash
 
-POST /produtos/adiciona: Cadastra novo produto.
+mvn spring-boot:run
+📖 Guia de API (Principais Rotas)
+1. Cadastro e Autenticação
+   POST /cadastro/loja: Cria uma nova loja e o usuário administrador.
 
-DELETE /produtos/{id}: Remove um produto.
+POST /auth/login: Autentica e retorna os tokens JWT.
 
+POST /auth/refresh: Renova o Access Token expirado.
+
+2. Gestão de Estoque (Requer Login)
+   GET /produtos: Lista todos os produtos da sua loja.
+
+POST /produtos: Cadastra um novo produto (Vínculo automático com sua loja).
+
+GET /produtos/{id}: Busca um produto pelo UUID.
+
+3. Operação de PDV
+   GET /pdv/produto/{codigoBarras}: Consulta informações do produto pelo código de barras.
+
+POST /pdv/venda: Realiza a baixa no estoque enviando o codigoBarras e a quantidade.
+
+4. Gestão de Usuários (Apenas ADMIN)
+   POST /usuarios: O administrador da loja cria novos usuários (vendedores) para sua unidade.
+
+🔒 Segurança e Fluxo de Dados
+O sistema utiliza o contexto de segurança do Spring para injetar a loja do usuário em cada operação. Nunca é necessário passar o ID da Loja manualmente nas requisições de produto ou venda, pois o UsuarioService extrai essa informação diretamente do Token JWT validado.
