@@ -74,6 +74,16 @@ O sistema utiliza um `SecurityFilter` que intercepta cada requisição, extrai o
 
 > **Nota:** Nas rotas protegidas, o `loja_id` é injetado automaticamente pelo `UsuarioService` a partir do contexto de autenticação, impedindo que um usuário tente forjar o ID de outra loja no corpo do JSON.
 
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Matheus Carlos de Almeida**
+https://github.com/Matheuszy
+
+---
+
 ## 📄 Licença
 
 Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
