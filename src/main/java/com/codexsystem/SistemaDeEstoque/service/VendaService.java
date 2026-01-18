@@ -21,29 +21,27 @@ public class VendaService {
     }
 
     @Transactional
-    public VendaResponseDTO realizarVenda(
-            VendaRequestDTO dto,
-            Loja loja
-    ) {
+    public VendaResponseDTO realizarVenda(VendaRequestDTO dto, Loja loja) {
         Produto produto = produtoRepository
-                .findByIdAndLoja(dto.produtoId(), loja)
+                .findByCodigoBarrasAndLoja(dto.codigoBarras(), loja)
                 .orElseThrow(() ->
-                        new RecursoNaoEncontrado("Produto não encontrado")
+                        new RecursoNaoEncontrado("Produto com código " + dto.codigoBarras() + " não encontrado nesta loja")
                 );
+
 
         if (produto.getQuantidade() <= 0) {
             throw new RuntimeException("Produto sem estoque");
         }
 
         if (dto.quantidade() > produto.getQuantidade()) {
-            throw new RuntimeException("Quantidade maior que o estoque disponível");
+            throw new RuntimeException("Quantidade solicitada maior que o estoque disponível");
         }
 
-        BigDecimal total =
-                produto.getValorVenda()
-                        .multiply(BigDecimal.valueOf(dto.quantidade()));
+        BigDecimal total = produto.getValorVenda().multiply(BigDecimal.valueOf(dto.quantidade()));
+
 
         produto.setQuantidade(produto.getQuantidade() - dto.quantidade());
+
 
         if (produto.getQuantidade() == 0) {
             produtoRepository.delete(produto);

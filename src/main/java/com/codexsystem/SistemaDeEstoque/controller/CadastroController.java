@@ -1,10 +1,12 @@
 package com.codexsystem.SistemaDeEstoque.controller;
 
+import com.codexsystem.SistemaDeEstoque.domain.Loja;
 import com.codexsystem.SistemaDeEstoque.dto.requests.CriarLojaDTO;
 import com.codexsystem.SistemaDeEstoque.dto.responses.UsuarioResponseDTO;
 import com.codexsystem.SistemaDeEstoque.domain.Usuario;
 import com.codexsystem.SistemaDeEstoque.service.LojaService;
 import com.codexsystem.SistemaDeEstoque.service.UsuarioService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +24,17 @@ public class CadastroController {
     }
 
     @PostMapping("/loja")
+    @Transactional
     public ResponseEntity<UsuarioResponseDTO> criarLoja(@RequestBody CriarLojaDTO dto) {
 
-        // 1️⃣ cria o admin
+
         Usuario admin = usuarioService.criarAdmin(
                 dto.username(),
                 dto.password()
         );
+
+
+        Loja novaLoja = lojaService.criarLoja(dto.nomeLoja(), admin);
 
         return ResponseEntity.ok(usuarioService.toDTO(admin));
     }

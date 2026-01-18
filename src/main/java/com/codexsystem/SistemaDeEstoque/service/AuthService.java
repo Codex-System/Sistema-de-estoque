@@ -1,23 +1,23 @@
 package com.codexsystem.SistemaDeEstoque.service;
 
-import com.codexsystem.SistemaDeEstoque.dto.requests.LoginRequestDTO;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.codexsystem.SistemaDeEstoque.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class AuthService implements UserDetailsService {
 
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRepository repository;
 
-    public AuthService(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 
-    public void login(LoginRequestDTO dto) {
-        var authToken =
-                new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
 
-        authenticationManager.authenticate(authToken);
-    }
 }

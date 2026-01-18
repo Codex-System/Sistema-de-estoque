@@ -3,6 +3,7 @@ package com.codexsystem.SistemaDeEstoque.service;
 import com.codexsystem.SistemaDeEstoque.domain.Loja;
 import com.codexsystem.SistemaDeEstoque.domain.Usuario;
 import com.codexsystem.SistemaDeEstoque.repository.LojaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,12 +15,12 @@ public class LojaService {
         this.lojaRepository = lojaRepository;
     }
 
+    @Transactional
     public Loja criarLoja(String nomeLoja, Usuario admin) {
-
-        lojaRepository.findByLojaAndAdmin(nomeLoja, admin)
-                .ifPresent(loja -> {
-                    throw new RuntimeException("Você já possui uma loja com esse nome");
-                });
+        // Verifica se já existe uma loja com esse nome (Regra de negócio)
+        lojaRepository.findByLoja(nomeLoja).ifPresent(l -> {
+            throw new RuntimeException("Este nome de loja já está em uso");
+        });
 
         Loja loja = new Loja();
         loja.setLoja(nomeLoja);

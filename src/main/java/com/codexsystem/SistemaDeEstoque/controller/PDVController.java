@@ -55,7 +55,6 @@ public class PDVController {
         );
     }
 
-    // 💰 Confirma venda
     @PostMapping("/venda")
     public ResponseEntity<VendaResponseDTO> vender(
             @RequestBody VendaRequestDTO dto
